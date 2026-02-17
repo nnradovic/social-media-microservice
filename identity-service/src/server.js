@@ -17,7 +17,7 @@ const PORT = process.env.PORT || 3001;
 
 if (process.env.DNS_SERVERS) {
   dns.setServers(
-    process.env.DNS_SERVERS.split(",").map((server) => server.trim())
+    process.env.DNS_SERVERS.split(",").map((server) => server.trim()),
   );
 }
 

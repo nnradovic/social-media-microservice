@@ -1,6 +1,5 @@
-const mongoose = requrire("mongoose");
+const mongoose = require("mongoose");
 const argon2 = require("argon2");
-const { use } = require("react");
 
 const userSchema = new mongoose.Schema({
   username: { type: String, required: true, unique: true, trim: true },
@@ -13,7 +12,6 @@ const userSchema = new mongoose.Schema({
   },
   password: { type: String, required: true },
   createdAt: { type: Date, default: Date.now },
-  timesamps: true,
 });
 
 userSchema.pre("save", async function (next) {

@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
+const RefreshToken = require("../src/models/Refreshtoken");
 
 const genereateToken = async (user) => {
   const accessToken = jwt.sign(

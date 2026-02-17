@@ -15,7 +15,6 @@ const refreshTokenSchema = new mongoose.Schema({
     type: Date,
     required: true,
   },
-  timestamps: true,
 });
 
 refreshTokenSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });

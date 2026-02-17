@@ -1,6 +1,7 @@
 const genereateToken = require("../../utils/generateToken");
 const logger = require("../../utils/logger");
 const { validateRegistration } = require("../../utils/validation");
+const User = require("../models/User");
 
 const registerUser = async (req, res) => {
   logger.info("Registering user with data: %o", req.body);
