@@ -2,3 +2,4 @@
 /api-getway/.env
 /identity-service/node_modules
 /identity-service/.env
+/api-getway/logs

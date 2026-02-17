@@ -1,9 +1,9 @@
 # Social Media Microservice
 
-A Node.js microservice-based backend project with:
+Node.js microservice backend with:
 
-- `identity-service`: user registration, token generation, MongoDB/Redis integration, and rate limiting.
-- `api-getway`: API gateway service scaffold.
+- `identity-service` for authentication flows.
+- `api-getway` (API gateway) for request proxying and centralized limits.
 
 ## Tech Stack
 
@@ -11,38 +11,36 @@ A Node.js microservice-based backend project with:
 - MongoDB (Mongoose)
 - Redis (ioredis)
 - JWT
-- Joi validation
-- Winston logging
+- Joi
+- Winston
 
 ## Project Structure
 
 ```text
 social-media-microservice/
-├─ api-getway/
-│  ├─ package.json
-│  └─ src/server.js
-├─ identity-service/
-│  ├─ package.json
-│  ├─ .env
-│  ├─ src/
-│  │  ├─ server.js
-│  │  ├─ controllers/
-│  │  ├─ middleware/
-│  │  ├─ models/
-│  │  └─ routes/
-│  └─ utils/
-└─ README.md
+|-- api-getway/
+|   |-- src/server.js
+|   |-- middleware/errorHandler.js
+|   |-- utils/logger.js
+|   `-- package.json
+|-- identity-service/
+|   |-- src/server.js
+|   |-- src/routes/identitiy-routes.js
+|   |-- src/controllers/identity-contorller.js
+|   |-- src/models/
+|   |-- src/middleware/errorHandler.js
+|   |-- utils/
+|   `-- package.json
+`-- README.md
 ```
 
 ## Prerequisites
 
-- Node.js 18+ (Node 20+ recommended)
-- MongoDB Atlas or local MongoDB instance
-- Redis instance
+- Node.js 18+ (20+ recommended)
+- MongoDB Atlas (or local MongoDB)
+- Redis
 
 ## Installation
-
-Install dependencies per service:
 
 ```bash
 cd api-getway
@@ -54,7 +52,7 @@ npm install
 
 ## Environment Variables
 
-Create `identity-service/.env`:
+### identity-service/.env
 
 ```env
 PORT=3001
@@ -65,12 +63,21 @@ REDIS_URL=redis://localhost:6379
 DNS_SERVERS=8.8.8.8,1.1.1.1
 ```
 
+### api-getway/.env
+
+```env
+PORT=3000
+NODE_ENV=development
+REDIS_URL=redis://localhost:6379
+IDENTITY_SERVICE_URL=http://localhost:3001
+```
+
 Notes:
 
-- `DNS_SERVERS` is optional, but can help if your machine fails SRV DNS lookups for MongoDB Atlas.
-- Keep `.env` files out of version control.
+- `DNS_SERVERS` is optional and useful when SRV DNS lookups to MongoDB Atlas fail.
+- `.env` files are ignored by `.gitignore`.
 
-## Running Services
+## Run
 
 Identity service:
 
@@ -79,59 +86,58 @@ cd identity-service
 npm run dev
 ```
 
-or:
-
-```bash
-cd identity-service
-npm start
-```
-
-API gateway (scaffold):
+Gateway:
 
 ```bash
 cd api-getway
 npm run dev
 ```
 
-## API (Current)
+## API Routes
 
-Base URL (identity service): `http://localhost:3001`
+Identity service base URL: `http://localhost:3001`
 
-### Register User
+- `POST /api/auth/register`
+- `POST /api/auth/login`
+- `POST /api/auth/refresh-token`
+- `POST /api/auth/logout`
 
-- Method: `POST`
-- Route: `/api/auth/register`
-- Body:
+Gateway base URL: `http://localhost:3000`
 
-```json
-{
-  "username": "testuser",
-  "email": "test@example.com",
-  "password": "secret123"
-}
-```
+- `POST /v1/auth/register` -> proxies to identity service
+- `POST /v1/auth/login` -> proxies to identity service
+- `POST /v1/auth/refresh-token` -> proxies to identity service
+- `POST /v1/auth/logout` -> proxies to identity service
 
-- Success: `201 Created`
-- Validation error: `400 Bad Request`
-- Rate limit exceeded: `429 Too Many Requests`
+## Validation Rules
+
+Registration payload:
+
+- `username`: string, min 3, max 30
+- `email`: valid email
+- `password`: string, min 6
+
+Login payload:
+
+- `email`: valid email
+- `password`: string, min 6
 
 ## Rate Limiting
 
-Identity service uses two layers:
+Identity service:
 
-- Global limiter via Redis (`rate-limiter-flexible`): 10 requests per second per IP.
-- Sensitive route limiter (`express-rate-limit` + Redis store): 5 requests per minute for registration.
+- Global limiter: `10 requests/second` per IP (`rate-limiter-flexible` + Redis)
+- Register route limiter: `5 requests/minute` (`express-rate-limit` + Redis store)
+
+Gateway:
+
+- Global limiter: `100 requests/minute` per IP (`express-rate-limit` + Redis store)
 
 ## Logging
 
-Winston logger is configured with:
+Both services use Winston with console + file transports:
 
-- Console logs
 - `identity-service/logs/error.log`
 - `identity-service/logs/combined.log`
-
-## Current Status
-
-- `identity-service` has active server and route wiring.
-- `api-getway/src/server.js` is currently empty (scaffold only).
-
+- `api-getway/logs/error.log`
+- `api-getway/logs/combined.log`

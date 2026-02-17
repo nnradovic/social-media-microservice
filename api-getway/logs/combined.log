@@ -21,3 +21,14 @@
 {"level":"info","message":"API Gateway is running on port 3000","service":"api-gateway","timestamp":"2026-02-17T18:14:00.514Z"}
 {"level":"info","message":"Identity service URL: http://localhost:3001","service":"api-gateway","timestamp":"2026-02-17T18:14:00.517Z"}
 {"level":"info","message":"Redis URL: redis://localhost:6379","service":"api-gateway","timestamp":"2026-02-17T18:14:00.518Z"}
+{"level":"info","message":"API Gateway is running on port 3000","service":"api-gateway","timestamp":"2026-02-17T19:45:07.474Z"}
+{"level":"info","message":"Identity service URL: http://localhost:3001","service":"api-gateway","timestamp":"2026-02-17T19:45:07.476Z"}
+{"level":"info","message":"Redis URL: redis://localhost:6379","service":"api-gateway","timestamp":"2026-02-17T19:45:07.477Z"}
+{"level":"info","message":"POST /v1/auth/login","service":"api-gateway","timestamp":"2026-02-17T20:01:35.001Z"}
+{"level":"debug","message":"Request body: undefined","service":"api-gateway","timestamp":"2026-02-17T20:01:35.002Z"}
+{"level":"info","message":"Upstream service error: POST /login returned status 500","service":"api-gateway","timestamp":"2026-02-17T20:01:35.037Z"}
+{"level":"info","message":"POST /v1/auth/login","service":"api-gateway","timestamp":"2026-02-17T20:02:16.584Z"}
+{"level":"debug","message":"Request body: undefined","service":"api-gateway","timestamp":"2026-02-17T20:02:16.586Z"}
+{"level":"info","message":"Upstream service error: POST /login returned status 400","service":"api-gateway","timestamp":"2026-02-17T20:02:16.671Z"}
+{"level":"info","message":"POST /v1/auth/login","service":"api-gateway","timestamp":"2026-02-17T20:02:32.664Z"}
+{"level":"debug","message":"Request body: undefined","service":"api-gateway","timestamp":"2026-02-17T20:02:32.666Z"}
